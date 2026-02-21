@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Side Language — The Side Programming Language</title>
+    <style>
+        /* стили остаются без изменений — как у тебя */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a1928;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: #0f1a2b;
+            border-bottom: 2px solid #2dd4bf;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 25, 40, 0.95);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2dd4bf, #0891b2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #0a1928;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #2dd4bf, #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 0.5rem;
+            background: #1e2f47;
+            padding: 0.25rem;
+            border-radius: 50px;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            color: #94a3b8;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: #2dd4bf;
+            color: #0a1928;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0a1928 0%, #1a2f45 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 2px solid #2dd4bf;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2dd4bf, #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #cbd5e1;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: #0f1a2b;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid #1e2f47;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #2dd4bf;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            color: #2dd4bf;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: #0f1a2b;
+            border-radius: 15px;
+            border: 1px solid #1e2f47;
+            text-align: center;
+        }
+
+        .download-section h2 {
+            color: #2dd4bf;
+            margin-bottom: 1rem;
+        }
+
+        .download-section p {
+            margin-bottom: 2rem;
+            color: #cbd5e1;
+        }
+
+        .download-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .download-table th {
+            background: #1e2f47;
+            color: #2dd4bf;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .download-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #1e2f47;
+        }
+
+        .version-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .whats-new-btn {
+            background: #1e2f47;
+            color: #2dd4bf;
+            border: 1px solid #2dd4bf;
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .whats-new-btn:hover {
+            background: #2dd4bf;
+            color: #0a1928;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #0f1a2b;
+            border: 2px solid #2dd4bf;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            margin: 2rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .modal-close:hover {
+            color: #2dd4bf;
+        }
+
+        .modal h3 {
+            color: #2dd4bf;
+            margin-bottom: 1rem;
+        }
+
+        .modal ul {
+            margin-left: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        .download-link {
+            background: #2dd4bf;
+            color: #0a1928;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .download-link:hover {
+            background: #0891b2;
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: #0f1a2b;
+            border-radius: 15px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+            border: 1px solid #1e2f47;
+        }
+
+        .sidebar h3 {
+            color: #2dd4bf;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .toc {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .toc a:hover {
+            color: #2dd4bf;
+            background: #1e2f47;
+            padding-left: 1rem;
+        }
+
+        .content {
+            background: #0f1a2b;
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid #1e2f47;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2dd4bf, #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            color: #2dd4bf;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #1e2f47;
+        }
+
+        h3 {
+            color: #e2e8f0;
+            margin: 1.5rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 0.25rem;
+        }
+
+        pre {
+            background: #0a1928;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid #1e2f47;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #2dd4bf;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th {
+            background: #1e2f47;
+            color: #2dd4bf;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #1e2f47;
+        }
+
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .function-card {
+            background: #0a1928;
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid #1e2f47;
+        }
+
+        .function-name {
+            color: #2dd4bf;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .note {
+            background: #1e2f47;
+            border-left: 4px solid #0891b2;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning {
+            background: #1e2f47;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .mobile-toc {
+            display: none;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-toc select {
+            width: 100%;
+            padding: 1rem;
+            background: #1e2f47;
+            color: #e2e8f0;
+            border: 1px solid #2dd4bf;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .mobile-toc {
+                display: block;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .function-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #0f1a2b;
+            border-top: 1px solid #1e2f47;
+            margin-top: 2rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">S</div>
+                <span class="logo-text">Side Language</span>
+            </div>
+            <div class="lang-switch">
+                <button class="lang-btn" onclick="switchLang('ru')">РУС</button>
+                <button class="lang-btn active" onclick="switchLang('en')">ENG</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 id="hero-title">Side Language</h1>
+            <div class="hero-subtitle" id="hero-subtitle">The Side Programming Language</div>
+            <div class="hero-description" id="hero-description">
+                A modern, simple, and efficient programming language with native Rust modules, encryption, and Windows integration.<br>
+                Created by human and AI in 7 hours.
+            </div>
+        </div>
+    </section>
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title" data-ru="350 КБ" data-en="350 KB">350 KB</div>
+            <div data-ru="Легковесный" data-en="Lightweight">Lightweight</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔌</div>
+            <div class="feature-title" data-ru="Нативные модули" data-en="Native Modules">Native Modules</div>
+            <div data-ru="Rust под капотом" data-en="Rust under the hood">Rust under the hood</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <div class="feature-title" data-ru="Сборка .exe" data-en="Build .exe">Build .exe</div>
+            <div data-ru="Компиляция в один файл" data-en="Single-file compilation">Single-file compilation</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <div class="feature-title" data-ru="GUI модуль" data-en="GUI Module">GUI Module</div>
+            <div data-ru="egui.dll в комплекте" data-en="egui.dll included">egui.dll included</div>
+        </div>
+    </div>
+
+    <div class="download-section" id="download-section">
+        <h2 id="download-title">Download Side</h2>
+        <p id="download-description">
+            Choose the version that suits you. Each release includes the interpreter, standard library, and documentation.
+        </p>
+        <table class="download-table">
+            <thead>
+                <tr>
+                    <th id="table-version">Version</th>
+                    <th id="table-file">File</th>
+                    <th id="table-action">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="version-cell">
+                            1.3.0 (native)
+                            <span class="whats-new-btn" onclick="showWhatsNew()">✨ What's new?</span>
+                        </div>
+                    </td>
+                    <td>Side_v1.3-native.exe</td>
+                    <td><a href="#" id="download-link-native" class="download-link" download>Download</a></td>
+                </tr>
+                <tr>
+                    <td>1.2.0 (stable)</td>
+                    <td>Side_v1.2-stable.exe</td>
+                    <td><a href="#" id="download-link-stable" class="download-link" download>Download</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="whatsnew-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="hideWhatsNew()">&times;</span>
+            <h3 id="modal-title">✨ What's new in 1.3?</h3>
+            <div id="modal-content">
+                <ul>
+                    <li><strong>Native Rust modules</strong> — load <code>egui.dll</code> and create GUI windows</li>
+                    <li><code>load_native("module")</code> — load compiled DLLs</li>
+                    <li>Write your own modules in Rust with simple C ABI</li>
+                    <li>Lightning fast — native speed, no interpreter overhead</li>
+                    <li>Example: <code>message_box("Title", "Hello!")</code> from egui module</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <aside class="sidebar" id="sidebar">
+            <h3 id="toc-title">📚 Contents</h3>
+            <ul class="toc" id="toc"></ul>
+        </aside>
+
+        <div class="mobile-toc">
+            <select id="mobile-toc-select" onchange="goToSection(this.value)">
+                <option value="">📖 Go to section...</option>
+            </select>
+        </div>
+
+        <main class="content" id="content"></main>
+    </div>
+
+    <footer class="footer">
+        <p id="footer-text">Side Language — created by human and AI in 7 hours 🚀</p>
+        <p style="color: #64748b; font-size: 0.9rem;">© 2026 Side Team. Documentation under MIT license</p>
+    </footer>
+
+    <script>
+        const GOOGLE_DRIVE_FILE_ID_STABLE = '1HWGOAs9LMCaFIOqQZXmRSWwncZtK_nOP';
+        const GOOGLE_DRIVE_FILE_ID_NATIVE = '1ztNGn93gDk_CweM6U5T_-DR7Dh6ulfbc';
+
+        const docs = {
+            ru: {
+                title: "📘 Полное руководство по языку Side",
+                sections: [
+                    // существующие секции (оставляем как есть)
+                    {
+                        id: "chto-takoe-side",
+                        title: "🤔 Что такое Side?",
+                        content: "<p><strong>Side</strong> — это современный язык программирования, созданный для тех, кто хочет быстро и просто писать полезные программы. У него понятный синтаксис, минимум лишних символов и максимум выразительности.</p><p><strong>Философия языка:</strong> простота, понятность и эффективность. Всё, что нужно для обучения и реальных проектов.</p>"
+                    },
+                    {
+                        id: "bystryy-start",
+                        title: "🚀 Быстрый старт за 1 минуту",
+                        content: "<h3>Ваша первая программа:</h3><pre><code class='language-side'>log \"Привет, мир!\"</code></pre><h3>Запуск:</h3><pre><code class='language-bash'>side-interpreter.exe имя_файла.sd</code></pre>"
+                    },
+                    // новые секции (добавляем после быстрого старта)
+                    {
+                        id: "tipy-dannyh",
+                        title: "🎨 Типы данных",
+                        content: `
+                            <table>
+                                <tr><th>Тип</th><th>Описание</th><th>Пример</th></tr>
+                                <tr><td><code>whole</code></td><td>Целое число</td><td><code>42</code>, <code>-10</code>, <code>0</code></td></tr>
+                                <tr><td><code>fraction</code></td><td>Дробное число</td><td><code>3.14</code>, <code>-0.001</code></td></tr>
+                                <tr><td><code>str</code></td><td>Строка в двойных кавычках</td><td><code>"Hello"</code>, <code>"Привет"</code></td></tr>
+                                <tr><td><code>flag</code></td><td>Логическое значение</td><td><code>true</code>, <code>false</code></td></tr>
+                                <tr><td><code>none</code></td><td>Пустота (null)</td><td><code>none</code></td></tr>
+                                <tr><td><code>list</code></td><td>Список элементов</td><td><code>[1, 2, 3]</code>, <code>["a", "b"]</code></td></tr>
+                                <tr><td>объект</td><td>Экземпляр структуры</td><td><code>new Player</code></td></tr>
+                            </table>
+                            <p>Тип переменной определяется автоматически при присваивании и в дальнейшем не меняется.</p>
+                        `
+                    },
+                    {
+                        id: "peremennye",
+                        title: "📦 Переменные и константы",
+                        content: `
+                            <h3><code>set</code> — изменяемая переменная</h3>
+                            <pre><code class="language-side">set возраст = 15
+set возраст = возраст + 1   # значение можно менять</code></pre>
+                            
+                            <h3><code>fix</code> — константа (неизменяемая)</h3>
+                            <pre><code class="language-side">fix ПИ = 3.14159
+# ПИ = 3.14     ← ОШИБКА! константу нельзя изменить</code></pre>
+                            
+                            <h3>Правила именования</h3>
+                            <ul>
+                                <li>Можно использовать: буквы (русские и английские), цифры, подчёркивание <code>_</code></li>
+                                <li>Нельзя начинать с цифры</li>
+                                <li>Регистр важен: <code>name</code> и <code>Name</code> — разные переменные</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        id: "operatory",
+                        title: "➕ Операторы",
+                        content: `
+                            <h3>Арифметические</h3>
+                            <table>
+                                <tr><th>Оператор</th><th>Действие</th><th>Пример</th></tr>
+                                <tr><td><code>+</code></td><td>Сложение</td><td><code>5 + 3 = 8</code></td></tr>
+                                <tr><td><code>-</code></td><td>Вычитание</td><td><code>5 - 3 = 2</code></td></tr>
+                                <tr><td><code>*</code></td><td>Умножение</td><td><code>5 * 3 = 15</code></td></tr>
+                                <tr><td><code>/</code></td><td>Деление целочисленное</td><td><code>5 / 3 = 1</code></td></tr>
+                                <tr><td><code>%</code></td><td>Остаток от деления</td><td><code>5 % 3 = 2</code></td></tr>
+                            </table>
+                            
+                            <div class="warning">
+                                <strong>Важно про деление:</strong> По умолчанию деление <strong>целочисленное</strong>. Для получения дробного результата используйте дробные числа:
+                                <pre><code class="language-side">5 / 3        # = 1
+5.0 / 3      # = 1.666...</code></pre>
+                            </div>
+                            
+                            <h3>Операторы сравнения</h3>
+                            <table>
+                                <tr><th>Оператор</th><th>Значение</th></tr>
+                                <tr><td><code>==</code></td><td>равно</td></tr>
+                                <tr><td><code>!=</code></td><td>не равно</td></tr>
+                                <tr><td><code>></code></td><td>больше</td></tr>
+                                <tr><td><code><</code></td><td>меньше</td></tr>
+                                <tr><td><code>>=</code></td><td>больше или равно</td></tr>
+                                <tr><td><code><=</code></td><td>меньше или равно</td></tr>
+                            </table>
+                            
+                            <h3>Логические операторы</h3>
+                            <table>
+                                <tr><th>Оператор</th><th>Значение</th><th>Пример</th></tr>
+                                <tr><td><code>and</code></td><td>И (оба истинны)</td><td><code>возраст > 18 and есть_права</code></td></tr>
+                                <tr><td><code>or</code></td><td>ИЛИ (хотя бы один)</td><td><code>админ or модератор</code></td></tr>
+                                <tr><td><code>not</code></td><td>НЕ (отрицание)</td><td><code>not мертв</code></td></tr>
+                            </table>
+
+                            <h3>Конкатенация строк</h3>
+                            <pre><code class="language-side">log "Здоровье: " + здоровье
+log "Инвентарь: " + [1, 2, 3]</code></pre>
+                        `
+                    },
+                    {
+                        id: "upravlenie",
+                        title: "🎯 Управляющие конструкции",
+                        content: `
+                            <h3>Условный оператор <code>check</code> / <code>else</code></h3>
+                            <pre><code class="language-side">check условие start
+    # код, если условие истинно
+else start
+    # код, если условие ложно
+end</code></pre>
+                            
+                            <h3>Цикл <code>loop</code></h3>
+                            <pre><code class="language-side">set i = 0
+loop i < 5 start
+    log "i = " + i
+    set i = i + 1
+end</code></pre>
+
+                            <h3>Выход из цикла <code>stop</code></h3>
+                            <pre><code class="language-side">loop true start
+    set ответ = entry "Введите 'exit' для выхода: "
+    stop if ответ == "exit"
+end</code></pre>
+
+                            <h3>Пауза <code>wait</code></h3>
+                            <pre><code class="language-side">wait 2        # пауза 2 секунды
+wait 0.5      # можно дробные значения</code></pre>
+                        `
+                    },
+                    {
+                        id: "proc",
+                        title: "🧠 Функции (proc)",
+                        content: `
+                            <h3>Объявление функции</h3>
+                            <pre><code class="language-side">proc имя(параметр1, параметр2) start
+    # тело функции
+    give результат   # возврат значения
+end</code></pre>
+                            
+                            <p><strong>Важно:</strong> Параметры внутри функции <strong>нельзя изменять</strong> — они ведут себя как константы.</p>
+                            
+                            <h3>Функция без возврата</h3>
+                            <pre><code class="language-side">proc приветствие(имя) start
+    log "Привет, " + имя
+    # если нет give, функция возвращает none
+end</code></pre>
+
+                            <h3>Функция с возвратом</h3>
+                            <pre><code class="language-side">proc сложение(a, b) start
+    give a + b
+end</code></pre>
+
+                            <h3>Вызов функции</h3>
+                            <pre><code class="language-side">set сумма = сложение(5, 3)        # сумма = 8
+приветствие("Алиса")               # вывод: Привет, Алиса
+set результат = приветствие("Боб") # результат = none</code></pre>
+                        `
+                    },
+                    {
+                        id: "form",
+                        title: "🏗️ Структуры (form)",
+                        content: `
+                            <h3>Объявление структуры</h3>
+                            <pre><code class="language-side">form ИмяСтруктуры start
+    set поле1 = значение   # изменяемое поле
+    fix поле2 = значение   # константное поле
+    set поле3              # поле без значения = none
+end</code></pre>
+                            
+                            <h3>Создание экземпляра</h3>
+                            <pre><code class="language-side">set объект = new ИмяСтруктуры</code></pre>
+                            
+                            <h3>Доступ к полям</h3>
+                            <pre><code class="language-side">объект.поле = новое_значение   # работает только для set-полей
+log объект.поле                 # чтение поля</code></pre>
+                            
+                            <h3>Пример</h3>
+                            <pre><code class="language-side">form Игрок start
+    set здоровье = 100
+    set имя = ""
+    fix макс_здоровье = 100
+end
+
+set герой = new Игрок
+герой.имя = "Артур"
+герой.здоровье = 75
+log герой   # Игрок { здоровье: 75, имя: Артур, макс_здоровье: 100 }</code></pre>
+                        `
+                    },
+                    {
+                        id: "list",
+                        title: "📋 Списки (list)",
+                        content: `
+                            <h3>Создание списка</h3>
+                            <pre><code class="language-side">set числа = [10, 20, 30]        # с элементами
+set пустой = []                  # пустой список</code></pre>
+                            
+                            <h3>Доступ по индексу</h3>
+                            <pre><code class="language-side">set x = числа[1]        # x = 20 (индексация с НУЛЯ!)
+числа[0] = 99           # изменение первого элемента</code></pre>
+                            
+                            <div class="note">
+                                <strong>Запомните:</strong> Индексация всегда начинается с <strong>0</strong>!
+                            </div>
+
+                            <h3>Вложенные списки</h3>
+                            <pre><code class="language-side">set матрица = [[1, 2], [3, 4]]
+set значение = матрица[1][0]    # значение = 3 (вторая строка, первый столбец)</code></pre>
+                        `
+                    },
+                    {
+                        id: "io",
+                        title: "📥 Ввод и вывод",
+                        content: `
+                            <h3>Вывод <code>log</code></h3>
+                            <pre><code class="language-side">log "Текст"           # вывод текста
+log переменная        # вывод значения переменной
+log "Значение: " + переменная  # конкатенация</code></pre>
+                            
+                            <h3>Ввод <code>entry</code></h3>
+                            <pre><code class="language-side">set имя = entry "Как вас зовут? "   # запрос ввода
+log "Привет, " + имя</code></pre>
+                            
+                            <p><strong>Важно:</strong> <code>entry</code> всегда возвращает <strong>строку</strong>.</p>
+                        `
+                    },
+                    {
+                        id: "trap",
+                        title: "⚠️ Обработка ошибок (trap)",
+                        content: `
+                            <pre><code class="language-side">trap start
+    # опасный код
+else start
+    # что делать при ошибке
+end</code></pre>
+                            
+                            <h3>Пример</h3>
+                            <pre><code class="language-side">trap start
+    set x = 10 / 0          # ошибка! деление на ноль
+else start
+    log "Обнаружена ошибка!"
+end
+
+log "Программа продолжается"   # эта строка выполнится</code></pre>
+                        `
+                    },
+                    {
+                        id: "link",
+                        title: "🔌 Модули (link)",
+                        content: `
+                            <h3>Подключение модуля</h3>
+                            <pre><code class="language-side">link "имя_файла.sd"</code></pre>
+                            
+                            <h3>Пример</h3>
+                            <p><strong>math.sd</strong></p>
+                            <pre><code class="language-side">proc квадрат(x) start
+    give x * x
+end
+
+fix ПИ = 3.14159</code></pre>
+                            
+                            <p><strong>main.sd</strong></p>
+                            <pre><code class="language-side">link "math.sd"
+log "5^2 = " + квадрат(5)
+log "ПИ = " + ПИ</code></pre>
+
+                            <h3>Пути к модулям</h3>
+                            <p>Путь в <code>link</code> может быть:</p>
+                            <ul>
+                                <li><strong>Относительным</strong> — поиск относительно текущей рабочей папки</li>
+                                <li><strong>Абсолютным</strong> — например <code>"C:/проект/math.sd"</code></li>
+                            </ul>
+                        `
+                    },
+                    {
+                        id: "spack",
+                        title: "🛠️ Система сборки Spack",
+                        content: `
+                            <h3>Команды</h3>
+                            <table>
+                                <tr><th>Команда</th><th>Описание</th></tr>
+                                <tr><td><code>spack run &lt;файл&gt;</code></td><td>Выполнить скрипт</td></tr>
+                                <tr><td><code>spack build [файл]</code></td><td>Собрать <code>.exe</code> из конфига</td></tr>
+                                <tr><td><code>spack connect &lt;файл&gt;</code></td><td>Подключить проект</td></tr>
+                            </table>
+                            
+                            <h3>Конфиг проекта <code>.spack</code></h3>
+                            <pre><code class="language-json">{
+    "name": "МойПроект",
+    "version": "1.0.0",
+    "main": "src/main.sd",
+    "output": "программа.exe"
+}</code></pre>
+                        `
+                    },
+                    {
+                        id: "file-functions",
+                        title: "📁 Файловые функции",
+                        content: `
+                            <div class="function-grid">
+                                <div class="function-card"><div class="function-name">create_dir(путь)</div><p>Создаёт папку</p></div>
+                                <div class="function-card"><div class="function-name">remove_dir(путь)</div><p>Удаляет пустую папку</p></div>
+                                <div class="function-card"><div class="function-name">rename_file(старое, новое)</div><p>Переименовывает</p></div>
+                                <div class="function-card"><div class="function-name">file_time(путь)</div><p>Время изменения</p></div>
+                                <div class="function-card"><div class="function-name">read_file(путь)</div><p>Читает файл</p></div>
+                                <div class="function-card"><div class="function-name">write_file(путь, содержимое)</div><p>Записывает файл</p></div>
+                                <div class="function-card"><div class="function-name">append_file(путь, содержимое)</div><p>Добавляет в конец</p></div>
+                                <div class="function-card"><div class="function-name">delete_file(путь)</div><p>Удаляет файл</p></div>
+                                <div class="function-card"><div class="function-name">copy_file(откуда, куда)</div><p>Копирует файл</p></div>
+                                <div class="function-card"><div class="function-name">file_exists(путь)</div><p>Проверяет существование</p></div>
+                                <div class="function-card"><div class="function-name">file_size(путь)</div><p>Размер в байтах</p></div>
+                                <div class="function-card"><div class="function-name">list_dir(путь)</div><p>Список файлов</p></div>
+                            </div>
+                        `
+                    },
+                    {
+                        id: "native-modules",
+                        title: "🔌 Нативные модули (v1.3)",
+                        content: `
+                            <h2>🔌 Что такое нативные модули?</h2>
+                            <p>Это библиотеки, написанные на Rust (или C/C++), которые можно подключать к Side и вызывать из скриптов. Они работают мгновенно и могут делать всё, что умеет Rust: GUI, сеть, графика, базы данных, 3D, звук.</p>
+                            <pre><code class="language-side">load_native("egui")        # загружаем модуль
+message_box("Привет!")     # вызываем функцию из модуля</code></pre>
+                            
+                            <h3>🎯 ЧЕМ ЭТО ЛУЧШЕ ОБЫЧНЫХ МОДУЛЕЙ?</h3>
+                            <table>
+                                <tr><th>Обычные модули (.sd)</th><th>Нативные модули (.dll)</th></tr>
+                                <tr><td>Медленные</td><td>Молниеносные (Rust)</td></tr>
+                                <tr><td>Только то, что есть в Side</td><td>Всё, что можно написать на Rust</td></tr>
+                                <tr><td>Простые скрипты</td><td>GUI, сеть, 3D, базы данных</td></tr>
+                                <tr><td>Исходный код виден</td><td>Скомпилированы, код скрыт</td></tr>
+                            </table>
+
+                            <h3>📁 ГДЕ ЛЕЖАТ МОДУЛИ?</h3>
+                            <p>Все модули должны находиться в папке <code>modules/</code> рядом с <code>side.exe</code>:</p>
+                            <pre>C:\\Program Files\\Side\\
+├── side.exe
+├── modules/
+│   ├── egui.dll      ← GUI модуль
+│   ├── net.dll       ← сетевой модуль (скоро)
+│   └── db.dll        ← базы данных (скоро)
+├── examples/
+└── docs/</pre>
+
+                            <h3>🚀 КАК ИСПОЛЬЗОВАТЬ МОДУЛИ</h3>
+                            <pre><code class="language-side">load_native("egui")
+set answer = message_box("Вопрос", "Тебе нравится Side?")
+
+check answer == 1 start
+    log "Мы рады! ❤️"
+else start
+    log "Ай-яй-яй! 😢"
+end</code></pre>
+
+                            <h3>🎨 ГОТОВЫЕ МОДУЛИ</h3>
+                            <p><strong>egui.dll</strong> — графический интерфейс</p>
+                            <pre><code class="language-side">load_native("egui")
+message_box("Side", "Привет, мир!")
+set choice = message_box("Спросили", "Ты согласен?")</code></pre>
+
+                            <h3>🛠️ КАК НАПИСАТЬ СВОЙ МОДУЛЬ</h3>
+                            <pre><code class="language-rust">use std::ffi::CStr;
+use std::os::raw::c_char;
+
+#[repr(C)]
+pub struct NativeFunction {
+    pub name: *const c_char,
+    pub args: u32,
+    pub func: *const std::ffi::c_void,
+}
+
+#[repr(C)]
+pub struct NativeModuleInfo {
+    pub name: *const c_char,
+    pub functions: *const NativeFunction,
+    pub count: u32,
+}
+
+extern "C" fn hello(name_ptr: *const c_char) -> i64 {
+    let name = unsafe { CStr::from_ptr(name_ptr).to_string_lossy() };
+    println!("Привет, {}!", name);
+    0
+}
+
+const FUNCTIONS: [NativeFunction; 1] = [
+    NativeFunction {
+        name: b"hello\\0" as *const u8 as *const c_char,
+        args: 1,
+        func: hello as *const std::ffi::c_void,
+    },
+];
+
+#[no_mangle]
+pub static side_module_info: NativeModuleInfo = NativeModuleInfo {
+    name: b"mymodule\\0" as *const u8 as *const c_char,
+    functions: FUNCTIONS.as_ptr(),
+    count: FUNCTIONS.len() as u32,
+};</code></pre>
+
+                            <h3>📋 ПРАВИЛА НАПИСАНИЯ ФУНКЦИЙ</h3>
+                            <table>
+                                <tr><th>Тип в Side</th><th>Тип в Rust</th></tr>
+                                <tr><td><code>whole</code></td><td><code>i64</code></td></tr>
+                                <tr><td><code>str</code></td><td><code>*const c_char</code></td></tr>
+                            </table>
+                        `
+                    }
+                ]
+            },
+            en: {
+                title: "📘 Side Language Complete Guide",
+                sections: [
+                    {
+                        id: "what-is-side",
+                        title: "🤔 What is Side?",
+                        content: "<p><strong>Side</strong> is a modern programming language designed for those who want to write useful programs quickly and simply. It has a clear syntax, minimal extra symbols, and maximum expressiveness.</p><p><strong>Language philosophy:</strong> simplicity, clarity, and efficiency. Everything you need for learning and real projects.</p>"
+                    },
+                    {
+                        id: "quick-start",
+                        title: "🚀 Quick Start in 1 Minute",
+                        content: "<h3>Your first program:</h3><pre><code class='language-side'>log \"Hello, world!\"</code></pre><h3>Run:</h3><pre><code class='language-bash'>side-interpreter.exe filename.sd</code></pre>"
+                    },
+                    // новые секции
+                    {
+                        id: "data-types",
+                        title: "🎨 Data Types",
+                        content: `
+                            <table>
+                                <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+                                <tr><td><code>whole</code></td><td>Integer number</td><td><code>42</code>, <code>-10</code>, <code>0</code></td></tr>
+                                <tr><td><code>fraction</code></td><td>Floating-point number</td><td><code>3.14</code>, <code>-0.001</code></td></tr>
+                                <tr><td><code>str</code></td><td>String in double quotes</td><td><code>"Hello"</code>, <code>"World"</code></td></tr>
+                                <tr><td><code>flag</code></td><td>Boolean value</td><td><code>true</code>, <code>false</code></td></tr>
+                                <tr><td><code>none</code></td><td>Null value</td><td><code>none</code></td></tr>
+                                <tr><td><code>list</code></td><td>List of elements</td><td><code>[1, 2, 3]</code>, <code>["a", "b"]</code></td></tr>
+                                <tr><td>object</td><td>Structure instance</td><td><code>new Player</code></td></tr>
+                            </table>
+                            <p>The variable type is automatically determined upon assignment and cannot be changed later.</p>
+                        `
+                    },
+                    {
+                        id: "variables",
+                        title: "📦 Variables and Constants",
+                        content: `
+                            <h3><code>set</code> — mutable variable</h3>
+                            <pre><code class="language-side">set age = 15
+set age = age + 1   # value can be changed</code></pre>
+                            
+                            <h3><code>fix</code> — constant (immutable)</h3>
+                            <pre><code class="language-side">fix PI = 3.14159
+# PI = 3.14     ← ERROR! constant cannot be changed</code></pre>
+                            
+                            <h3>Naming rules</h3>
+                            <ul>
+                                <li>Can use: letters (English and Russian), digits, underscore <code>_</code></li>
+                                <li>Cannot start with a digit</li>
+                                <li>Case sensitive: <code>name</code> and <code>Name</code> are different variables</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        id: "operators",
+                        title: "➕ Operators",
+                        content: `
+                            <h3>Arithmetic</h3>
+                            <table>
+                                <tr><th>Operator</th><th>Operation</th><th>Example</th></tr>
+                                <tr><td><code>+</code></td><td>Addition</td><td><code>5 + 3 = 8</code></td></tr>
+                                <tr><td><code>-</code></td><td>Subtraction</td><td><code>5 - 3 = 2</code></td></tr>
+                                <tr><td><code>*</code></td><td>Multiplication</td><td><code>5 * 3 = 15</code></td></tr>
+                                <tr><td><code>/</code></td><td>Integer division</td><td><code>5 / 3 = 1</code></td></tr>
+                                <tr><td><code>%</code></td><td>Remainder</td><td><code>5 % 3 = 2</code></td></tr>
+                            </table>
+                            
+                            <div class="warning">
+                                <strong>Important about division:</strong> By default, division is <strong>integer division</strong>. To get a fractional result, use fractional numbers:
+                                <pre><code class="language-side">5 / 3        # = 1
+5.0 / 3      # = 1.666...</code></pre>
+                            </div>
+                            
+                            <h3>Comparison operators</h3>
+                            <table>
+                                <tr><th>Operator</th><th>Meaning</th></tr>
+                                <tr><td><code>==</code></td><td>equal to</td></tr>
+                                <tr><td><code>!=</code></td><td>not equal to</td></tr>
+                                <tr><td><code>></code></td><td>greater than</td></tr>
+                                <tr><td><code><</code></td><td>less than</td></tr>
+                                <tr><td><code>>=</code></td><td>greater than or equal to</td></tr>
+                                <tr><td><code><=</code></td><td>less than or equal to</td></tr>
+                            </table>
+                            
+                            <h3>Logical operators</h3>
+                            <table>
+                                <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+                                <tr><td><code>and</code></td><td>AND (both true)</td><td><code>age > 18 and has_license</code></td></tr>
+                                <tr><td><code>or</code></td><td>OR (at least one true)</td><td><code>admin or moderator</code></td></tr>
+                                <tr><td><code>not</code></td><td>NOT (negation)</td><td><code>not dead</code></td></tr>
+                            </table>
+
+                            <h3>String concatenation</h3>
+                            <pre><code class="language-side">log "Health: " + health
+log "Inventory: " + [1, 2, 3]</code></pre>
+                        `
+                    },
+                    {
+                        id: "control-flow",
+                        title: "🎯 Control Flow",
+                        content: `
+                            <h3>Conditional <code>check</code> / <code>else</code></h3>
+                            <pre><code class="language-side">check condition start
+    # code if condition is true
+else start
+    # code if condition is false
+end</code></pre>
+                            
+                            <h3><code>loop</code> loop</h3>
+                            <pre><code class="language-side">set i = 0
+loop i < 5 start
+    log "i = " + i
+    set i = i + 1
+end</code></pre>
+
+                            <h3>Exit loop with <code>stop</code></h3>
+                            <pre><code class="language-side">loop true start
+    set answer = entry "Enter 'exit' to quit: "
+    stop if answer == "exit"
+end</code></pre>
+
+                            <h3>Pause <code>wait</code></h3>
+                            <pre><code class="language-side">wait 2        # pause 2 seconds
+wait 0.5      # fractional values allowed</code></pre>
+                        `
+                    },
+                    {
+                        id: "proc",
+                        title: "🧠 Functions (proc)",
+                        content: `
+                            <h3>Function declaration</h3>
+                            <pre><code class="language-side">proc name(param1, param2) start
+    # function body
+    give result   # return value
+end</code></pre>
+                            
+                            <p><strong>Important:</strong> Parameters inside a function <strong>cannot be changed</strong> — they behave like constants.</p>
+                            
+                            <h3>Function without return</h3>
+                            <pre><code class="language-side">proc greet(name) start
+    log "Hello, " + name
+    # if no give, function returns none
+end</code></pre>
+
+                            <h3>Function with return</h3>
+                            <pre><code class="language-side">proc add(a, b) start
+    give a + b
+end</code></pre>
+
+                            <h3>Calling a function</h3>
+                            <pre><code class="language-side">set sum = add(5, 3)        # sum = 8
+greet("Alice")               # output: Hello, Alice
+set result = greet("Bob")    # result = none</code></pre>
+                        `
+                    },
+                    {
+                        id: "form",
+                        title: "🏗️ Structures (form)",
+                        content: `
+                            <h3>Structure declaration</h3>
+                            <pre><code class="language-side">form StructureName start
+    set field1 = value   # mutable field
+    fix field2 = value   # constant field
+    set field3           # field without value = none
+end</code></pre>
+                            
+                            <h3>Creating an instance</h3>
+                            <pre><code class="language-side">set obj = new StructureName</code></pre>
+                            
+                            <h3>Accessing fields</h3>
+                            <pre><code class="language-side">obj.field = new_value   # works only for set-fields
+log obj.field            # reading field</code></pre>
+                            
+                            <h3>Example</h3>
+                            <pre><code class="language-side">form Player start
+    set health = 100
+    set name = ""
+    fix max_health = 100
+end
+
+set hero = new Player
+hero.name = "Arthur"
+hero.health = 75
+log hero   # Player { health: 75, name: Arthur, max_health: 100 }</code></pre>
+                        `
+                    },
+                    {
+                        id: "list",
+                        title: "📋 Lists (list)",
+                        content: `
+                            <h3>Creating a list</h3>
+                            <pre><code class="language-side">set numbers = [10, 20, 30]        # with elements
+set empty = []                      # empty list</code></pre>
+                            
+                            <h3>Access by index</h3>
+                            <pre><code class="language-side">set x = numbers[1]        # x = 20 (indexing starts from ZERO!)
+numbers[0] = 99            # changing the first element</code></pre>
+                            
+                            <div class="note">
+                                <strong>Remember:</strong> Indexing always starts from <strong>0</strong>!
+                            </div>
+
+                            <h3>Nested lists</h3>
+                            <pre><code class="language-side">set matrix = [[1, 2], [3, 4]]
+set value = matrix[1][0]    # value = 3 (second row, first column)</code></pre>
+                        `
+                    },
+                    {
+                        id: "io",
+                        title: "📥 Input and Output",
+                        content: `
+                            <h3>Output <code>log</code></h3>
+                            <pre><code class="language-side">log "Text"           # output text
+log variable         # output variable value
+log "Value: " + variable  # concatenation</code></pre>
+                            
+                            <h3>Input <code>entry</code></h3>
+                            <pre><code class="language-side">set name = entry "What is your name? "   # input prompt
+log "Hello, " + name</code></pre>
+                            
+                            <p><strong>Important:</strong> <code>entry</code> always returns a <strong>string</strong>.</p>
+                        `
+                    },
+                    {
+                        id: "trap",
+                        title: "⚠️ Error Handling (trap)",
+                        content: `
+                            <pre><code class="language-side">trap start
+    # dangerous code
+else start
+    # what to do on error
+end</code></pre>
+                            
+                            <h3>Example</h3>
+                            <pre><code class="language-side">trap start
+    set x = 10 / 0          # error! division by zero
+else start
+    log "Error detected!"
+end
+
+log "Program continues"   # this line will execute</code></pre>
+                        `
+                    },
+                    {
+                        id: "link",
+                        title: "🔌 Modules (link)",
+                        content: `
+                            <h3>Loading a module</h3>
+                            <pre><code class="language-side">link "filename.sd"</code></pre>
+                            
+                            <h3>Example</h3>
+                            <p><strong>math.sd</strong></p>
+                            <pre><code class="language-side">proc square(x) start
+    give x * x
+end
+
+fix PI = 3.14159</code></pre>
+                            
+                            <p><strong>main.sd</strong></p>
+                            <pre><code class="language-side">link "math.sd"
+log "5^2 = " + square(5)
+log "PI = " + PI</code></pre>
+
+                            <h3>Module paths</h3>
+                            <p>The path in <code>link</code> can be:</p>
+                            <ul>
+                                <li><strong>Relative</strong> — search relative to the current working directory</li>
+                                <li><strong>Absolute</strong> — e.g. <code>"C:/project/math.sd"</code></li>
+                            </ul>
+                        `
+                    },
+                    {
+                        id: "spack",
+                        title: "🛠️ Spack Build System",
+                        content: `
+                            <h3>Commands</h3>
+                            <table>
+                                <tr><th>Command</th><th>Description</th></tr>
+                                <tr><td><code>spack run &lt;file&gt;</code></td><td>Run script</td></tr>
+                                <tr><td><code>spack build [file]</code></td><td>Build <code>.exe</code> from config</td></tr>
+                                <tr><td><code>spack connect &lt;file&gt;</code></td><td>Connect project</td></tr>
+                            </table>
+                            
+                            <h3>Project config <code>.spack</code></h3>
+                            <pre><code class="language-json">{
+    "name": "MyProject",
+    "version": "1.0.0",
+    "main": "src/main.sd",
+    "output": "program.exe"
+}</code></pre>
+                        `
+                    },
+                    {
+                        id: "file-functions",
+                        title: "📁 File Functions",
+                        content: `
+                            <div class="function-grid">
+                                <div class="function-card"><div class="function-name">create_dir(path)</div><p>Creates directory</p></div>
+                                <div class="function-card"><div class="function-name">remove_dir(path)</div><p>Removes empty directory</p></div>
+                                <div class="function-card"><div class="function-name">rename_file(old, new)</div><p>Renames file</p></div>
+                                <div class="function-card"><div class="function-name">file_time(path)</div><p>Modification time</p></div>
+                                <div class="function-card"><div class="function-name">read_file(path)</div><p>Reads file</p></div>
+                                <div class="function-card"><div class="function-name">write_file(path, content)</div><p>Writes file</p></div>
+                                <div class="function-card"><div class="function-name">append_file(path, content)</div><p>Appends to file</p></div>
+                                <div class="function-card"><div class="function-name">delete_file(path)</div><p>Deletes file</p></div>
+                                <div class="function-card"><div class="function-name">copy_file(src, dst)</div><p>Copies file</p></div>
+                                <div class="function-card"><div class="function-name">file_exists(path)</div><p>Checks if exists</p></div>
+                                <div class="function-card"><div class="function-name">file_size(path)</div><p>Size in bytes</p></div>
+                                <div class="function-card"><div class="function-name">list_dir(path)</div><p>Lists directory</p></div>
+                            </div>
+                        `
+                    },
+                    {
+                        id: "native-modules",
+                        title: "🔌 Native Modules (v1.3)",
+                        content: `
+                            <h2>🔌 What are Native Modules?</h2>
+                            <p>These are libraries written in Rust (or C/C++) that can be loaded into Side and called from scripts. They work instantly and can do everything Rust can: GUI, networking, graphics, databases, 3D, sound.</p>
+                            <pre><code class="language-side">load_native("egui")        # load module
+message_box("Hello!")      # call function from module</code></pre>
+                            
+                            <h3>🎯 WHY NATIVE MODULES?</h3>
+                            <table>
+                                <tr><th>Regular modules (.sd)</th><th>Native modules (.dll)</th></tr>
+                                <tr><td>Slow</td><td>Lightning fast (Rust)</td></tr>
+                                <tr><td>Only what Side has</td><td>Anything you can write in Rust</td></tr>
+                                <tr><td>Simple scripts</td><td>GUI, networking, 3D, databases</td></tr>
+                                <tr><td>Source code visible</td><td>Compiled, code hidden</td></tr>
+                            </table>
+
+                            <h3>📁 WHERE MODULES GO</h3>
+                            <p>All modules must be in the <code>modules/</code> folder next to <code>side.exe</code>:</p>
+                            <pre>C:\\Program Files\\Side\\
+├── side.exe
+├── modules/
+│   ├── egui.dll      ← GUI module
+│   ├── net.dll       ← networking (soon)
+│   └── db.dll        ← databases (soon)
+├── examples/
+└── docs/</pre>
+
+                            <h3>🚀 HOW TO USE MODULES</h3>
+                            <pre><code class="language-side">load_native("egui")
+set answer = message_box("Question", "Do you like Side?")
+
+check answer == 1 start
+    log "We're happy! ❤️"
+else start
+    log "Oh no! 😢"
+end</code></pre>
+
+                            <h3>🎨 READY-TO-USE MODULES</h3>
+                            <p><strong>egui.dll</strong> — GUI toolkit</p>
+                            <pre><code class="language-side">load_native("egui")
+message_box("Side", "Hello, world!")
+set choice = message_box("Question", "Are you sure?")</code></pre>
+
+                            <h3>🛠️ WRITING YOUR OWN MODULE</h3>
+                            <pre><code class="language-rust">use std::ffi::CStr;
+use std::os::raw::c_char;
+
+#[repr(C)]
+pub struct NativeFunction {
+    pub name: *const c_char,
+    pub args: u32,
+    pub func: *const std::ffi::c_void,
+}
+
+#[repr(C)]
+pub struct NativeModuleInfo {
+    pub name: *const c_char,
+    pub functions: *const NativeFunction,
+    pub count: u32,
+}
+
+extern "C" fn hello(name_ptr: *const c_char) -> i64 {
+    let name = unsafe { CStr::from_ptr(name_ptr).to_string_lossy() };
+    println!("Hello, {}!", name);
+    0
+}
+
+const FUNCTIONS: [NativeFunction; 1] = [
+    NativeFunction {
+        name: b"hello\\0" as *const u8 as *const c_char,
+        args: 1,
+        func: hello as *const std::ffi::c_void,
+    },
+];
+
+#[no_mangle]
+pub static side_module_info: NativeModuleInfo = NativeModuleInfo {
+    name: b"mymodule\\0" as *const u8 as *const c_char,
+    functions: FUNCTIONS.as_ptr(),
+    count: FUNCTIONS.len() as u32,
+};</code></pre>
+
+                            <h3>📋 FUNCTION SIGNATURES</h3>
+                            <table>
+                                <tr><th>Side type</th><th>Rust type</th></tr>
+                                <tr><td><code>whole</code></td><td><code>i64</code></td></tr>
+                                <tr><td><code>str</code></td><td><code>*const c_char</code></td></tr>
+                            </table>
+                        `
+                    }
+                ]
+            }
+        };
+
+        const translations = {
+            ru: {
+                heroTitle: "Side Language",
+                heroSubtitle: "Язык программирования Side",
+                heroDescription: "Современный, простой и эффективный язык программирования с нативными Rust-модулями, шифрованием и интеграцией с Windows. Создан человеком и ИИ за 7 часов.",
+                downloadTitle: "Скачать Side",
+                downloadDescription: "Выберите подходящую версию. Каждый релиз включает интерпретатор, стандартную библиотеку и документацию.",
+                tableVersion: "Версия",
+                tableFile: "Файл",
+                tableAction: "Действие",
+                footer: "Side Language — создан человеком и ИИ за 7 часов 🚀",
+                tocTitle: "📚 Содержание",
+                mobilePlaceholder: "📖 Перейти к разделу...",
+                modalTitle: "✨ Что нового в 1.3?",
+                modalContent: `
+                    <ul>
+                        <li><strong>Нативные Rust-модули</strong> — загружай <code>egui.dll</code> и создавай GUI-окна</li>
+                        <li><code>load_native("модуль")</code> — загрузка скомпилированных DLL</li>
+                        <li>Пиши свои модули на Rust с простым C ABI</li>
+                        <li>Мгновенная скорость — никаких накладных расходов интерпретатора</li>
+                        <li>Пример: <code>message_box("Заголовок", "Привет!")</code> из модуля egui</li>
+                    </ul>
+                `
+            },
+            en: {
+                heroTitle: "Side Language",
+                heroSubtitle: "The Side Programming Language",
+                heroDescription: "A modern, simple, and efficient programming language with native Rust modules, encryption, and Windows integration. Created by human and AI in 7 hours.",
+                downloadTitle: "Download Side",
+                downloadDescription: "Choose the version that suits you. Each release includes the interpreter, standard library, and documentation.",
+                tableVersion: "Version",
+                tableFile: "File",
+                tableAction: "Action",
+                footer: "Side Language — created by human and AI in 7 hours 🚀",
+                tocTitle: "📚 Contents",
+                mobilePlaceholder: "📖 Go to section...",
+                modalTitle: "✨ What's new in 1.3?",
+                modalContent: `
+                    <ul>
+                        <li><strong>Native Rust modules</strong> — load <code>egui.dll</code> and create GUI windows</li>
+                        <li><code>load_native("module")</code> — load compiled DLLs</li>
+                        <li>Write your own modules in Rust with simple C ABI</li>
+                        <li>Lightning fast — no interpreter overhead</li>
+                        <li>Example: <code>message_box("Title", "Hello!")</code> from egui module</li>
+                    </ul>
+                `
+            }
+        };
+
+        let currentLang = 'en';
+
+        function showWhatsNew() {
+            document.getElementById('whatsnew-modal').style.display = 'flex';
+            document.getElementById('modal-title').textContent = translations[currentLang].modalTitle;
+            document.getElementById('modal-content').innerHTML = translations[currentLang].modalContent;
+        }
+
+        function hideWhatsNew() {
+            document.getElementById('whatsnew-modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('whatsnew-modal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function updateUILanguage(lang) {
+            const t = translations[lang];
+            
+            document.getElementById('hero-title').textContent = t.heroTitle;
+            document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
+            document.getElementById('hero-description').textContent = t.heroDescription;
+            document.getElementById('download-title').textContent = t.downloadTitle;
+            document.getElementById('download-description').textContent = t.downloadDescription;
+            document.getElementById('table-version').textContent = t.tableVersion;
+            document.getElementById('table-file').textContent = t.tableFile;
+            document.getElementById('table-action').textContent = t.tableAction;
+            document.getElementById('footer-text').textContent = t.footer;
+            document.getElementById('toc-title').textContent = t.tocTitle;
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((lang === 'ru' && btn.textContent === 'РУС') || 
+                    (lang === 'en' && btn.textContent === 'ENG')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.feature-card').forEach((card, index) => {
+                const title = card.querySelector('.feature-title');
+                const desc = card.querySelector('div:last-child');
+                
+                const titles = {
+                    ru: ['350 КБ', 'Нативные модули', 'Сборка .exe', 'GUI модуль'],
+                    en: ['350 KB', 'Native Modules', 'Build .exe', 'GUI Module']
+                };
+                
+                const descs = {
+                    ru: ['Легковесный', 'Rust под капотом', 'Компиляция в один файл', 'egui.dll в комплекте'],
+                    en: ['Lightweight', 'Rust under the hood', 'Single-file compilation', 'egui.dll included']
+                };
+                
+                if (title) title.textContent = titles[lang][index];
+                if (desc) desc.textContent = descs[lang][index];
+            });
+
+            const nativeLink = document.getElementById('download-link-native');
+            const stableLink = document.getElementById('download-link-stable');
+            nativeLink.href = `https://drive.google.com/uc?export=download&id=${GOOGLE_DRIVE_FILE_ID_NATIVE}`;
+            stableLink.href = `https://drive.google.com/uc?export=download&id=${GOOGLE_DRIVE_FILE_ID_STABLE}`;
+            
+            renderContent();
+        }
+
+        function switchLang(lang) {
+            currentLang = lang;
+            updateUILanguage(lang);
+        }
+
+        function renderContent() {
+            const content = document.getElementById('content');
+            const toc = document.getElementById('toc');
+            const mobileSelect = document.getElementById('mobile-toc-select');
+            
+            const langData = docs[currentLang];
+            
+            let html = `<h1>${langData.title}</h1>`;
+            langData.sections.forEach(section => {
+                html += `<section id="${section.id}">`;
+                html += `<h2>${section.title}</h2>`;
+                html += section.content;
+                html += `</section>`;
+            });
+            
+            content.innerHTML = html;
+            
+            let tocHtml = '';
+            let mobileOptions = currentLang === 'ru' 
+                ? '<option value="">📖 Перейти к разделу...</option>'
+                : '<option value="">📖 Go to section...</option>';
+            
+            langData.sections.forEach(section => {
+                tocHtml += `<li><a href="#${section.id}">${section.title}</a></li>`;
+                mobileOptions += `<option value="#${section.id}">${section.title}</option>`;
+            });
+            
+            toc.innerHTML = tocHtml;
+            mobileSelect.innerHTML = mobileOptions;
+            
+            document.querySelectorAll('pre code').forEach(block => {
+                hljs.highlightBlock(block);
+            });
+        }
+
+        function goToSection(sectionId) {
+            if (sectionId) {
+                window.location.hash = sectionId;
+            }
+        }
+
+        updateUILanguage('en');
+
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const id = e.target.getAttribute('href');
+                const element = document.querySelector(id);
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
