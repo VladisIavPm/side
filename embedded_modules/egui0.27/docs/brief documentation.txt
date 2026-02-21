@@ -1,0 +1,91 @@
+📦 Установка модуля egui
+1. Скачай модуль
+Файл egui.dll должен лежать в папке modules/ рядом с side.exe
+
+Структура папок:
+C:\Program Files\Side\
+├── side.exe
+├── modules/
+│   └── egui.dll
+├── examples/
+└── docs/
+
+2. Подключение в коде
+load_native("egui")  # загружаем модуль
+
+🎯 Доступные функции
+1. message_box(title, text) — диалоговое окно
+Показывает окно с сообщением и кнопками OK/Cancel.
+set result = message_box("Заголовок", "Текст сообщения")
+Возвращает:
+
+1 — нажата OK
+
+0 — нажата Cancel
+
+2. input_box(title, prompt) — окно ввода (скоро)
+Будет возвращать введённый текст.
+
+3. alert(text) — простое сообщение
+alert("Привет, мир!")  # просто окно с OK
+
+📝 Примеры использования
+Пример 1: Простое сообщение
+load_native("egui")
+message_box("Side", "Привет из графического интерфейса!")
+
+Пример 2: Диалог с выбором
+load_native("egui")
+
+set answer = message_box("Вопрос", "Тебе нравится программировать?")
+
+check answer == 1 start
+    log "Отлично! Продолжай в том же духе!"
+else start
+    log "Может, стоит попробовать ещё раз?"
+end
+
+Пример 3: Цикл с GUI
+
+load_native("egui")
+
+loop true start
+    set choice = message_box("Меню", "1. Сказать привет\n2. Выход")
+    
+    check choice == 1 start
+        message_box("Привет", "Здравствуй, пользователь!")
+    else start
+        message_box("Пока", "До встречи!")
+        stop
+    end
+end
+
+Пример 4: Калькулятор с GUI
+load_native("egui")
+
+set num1_str = entry "Введите первое число: "
+set num2_str = entry "Введите второе число: "
+
+# Пока нет преобразования строк, используем костыль
+set num1 = 10
+set num2 = 5
+set sum = num1 + num2
+
+message_box("Результат", "Сумма = " + sum)
+
+🚀 Сборка .exe с GUI
+1. Создай конфиг gui_app.spack:
+{
+    "name": "GuiApp",
+    "version": "1.0",
+    "main": "gui_example.sd"
+}
+
+2. Собери:
+spack build путь\...gui_app.spack
+
+3. Запусти:
+GuiApp.exe
+(рядом должна лежать папка modules/ с egui.dll)
+
+
