@@ -1,0 +1,13 @@
+trap start
+    set x = 10 / 0
+else start
+    log "Ошибка деления!"
+end
+
+trap start
+    set y = unknown_var
+else start
+    log "Переменная не найдена!"
+end
+
+log "Программа продолжается"

@@ -1,0 +1,33 @@
+# Простой менеджер задач
+form Task start
+    set title = ""
+    set done = false
+end
+
+set task1 = new Task
+task1.title = "Купить хлеб"
+task1.done = false
+
+set task2 = new Task
+task2.title = "Выучить Side"
+task2.done = true
+
+set tasks = [task1, task2]
+
+# Функция принимает список задач как параметр
+proc show_tasks(task_list) start
+    log "=== ЗАДАЧИ ==="
+    set i = 0
+    loop i < len(task_list) start
+        set t = task_list[i]
+        set status = " "
+        check t.done start
+            set status = "✓"
+        end
+        log status + " " + i + ". " + t.title
+        set i = i + 1
+    end
+end
+
+# Вызываем с глобальным списком
+show_tasks(tasks)

@@ -1,0 +1,11 @@
+# Структуры
+form Player start
+    set hp = 100
+    set name = ""
+    fix max_hp = 100
+end
+
+set hero = new Player
+hero.name = "Артур"
+hero.hp = 75
+log hero

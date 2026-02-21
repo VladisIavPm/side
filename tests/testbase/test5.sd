@@ -1,0 +1,15 @@
+form Player start
+    set hp = 100
+    set name = ""
+    fix max_hp = 100
+end
+
+set hero = new Player
+hero.name = "Arthur"
+hero.hp = 75
+log hero
+log "Имя: " + hero.name
+log "HP: " + hero.hp
+log "Max HP: " + hero.max_hp
+
+# hero.max_hp = 200  # раскомментируй для проверки ошибки

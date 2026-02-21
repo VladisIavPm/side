@@ -1,0 +1,64 @@
+# ============================================
+# ТЕСТ ВСЕХ ФАЙЛОВЫХ ФУНКЦИЙ
+# ============================================
+
+log "=== ТЕСТ 1: Запись файла ==="
+write_file("test1.txt", "Привет, это тестовая строка")
+log "Файл test1.txt создан"
+
+log "\n=== ТЕСТ 2: Проверка существования ==="
+check file_exists("test1.txt") start
+    set size = file_size("test1.txt")
+    log "Файл существует, размер: " + size + " байт"
+else start
+    log "ОШИБКА: Файл не создался!"
+end
+
+log "\n=== ТЕСТ 3: Чтение файла ==="
+set content = read_file("test1.txt")
+log "Содержимое: " + content
+
+log "\n=== ТЕСТ 4: Дозапись в файл ==="
+append_file("test1.txt", "Это вторая строка (добавлена)")
+log "Строка добавлена"
+
+log "\n=== ТЕСТ 5: Чтение после дозаписи ==="
+set new_content = read_file("test1.txt")
+log "Новое содержимое:\n" + new_content
+
+log "\n=== ТЕСТ 6: Копирование файла ==="
+copy_file("test1.txt", "test1_copy.txt")
+log "Файл скопирован в test1_copy.txt"
+
+log "\n=== ТЕСТ 7: Размер копии ==="
+set copy_size = file_size("test1_copy.txt")
+log "Размер копии: " + copy_size + " байт"
+
+log "\n=== ТЕСТ 8: Список файлов в папке ==="
+set files = list_dir(".")
+log "Файлы в текущей папке:"
+set i = 0
+loop i < len(files) start   # пока нет len, но мы добавим!
+    log "  " + files[i]
+    set i = i + 1
+end
+
+log "\n=== ТЕСТ 9: Удаление оригинального файла ==="
+delete_file("test1.txt")
+log "Оригинал удалён"
+
+log "\n=== ТЕСТ 10: Проверка удаления ==="
+check file_exists("test1.txt") start
+    log "Оригинал всё ещё существует (ОШИБКА!)"
+else start
+    log "Оригинала нет (НОРМАЛЬНО)"
+end
+
+log "\n=== ТЕСТ 11: Проверка копии ==="
+check file_exists("test1_copy.txt") start
+    log "Копия существует (НОРМАЛЬНО)"
+else start
+    log "Копия пропала (ОШИБКА!)"
+end
+
+log "\n=== ВСЕ ТЕСТЫ ЗАВЕРШЕНЫ ==="

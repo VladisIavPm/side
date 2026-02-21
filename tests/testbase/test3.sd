@@ -1,0 +1,11 @@
+set i = 0
+loop i < 5 start
+    log "i = " + i
+    set i = i + 1
+    stop if i == 3
+end
+log "После цикла"
+
+log "Ждём 2 секунды..."
+wait 2
+log "Готово"

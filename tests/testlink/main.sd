@@ -1,0 +1,3 @@
+link "C:/Users/User/side-interpreter/testlink/math.sd"link "C:/Users/User/side-interpreter/testlink/math.sd"
+log "5^2 = " + square(5)
+log "PI = " + PI

@@ -1,0 +1,12 @@
+# Функции
+proc add(a, b) start
+    give a + b
+end
+
+proc greet(name) start
+    log "Привет, " + name
+end
+
+set sum = add(5, 3)
+log "5 + 3 = " + sum
+greet("Аноним")

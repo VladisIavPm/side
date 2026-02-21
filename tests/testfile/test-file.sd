@@ -1,0 +1,13 @@
+# Запись
+write_file("test.txt", "Привет, Side!")
+
+# Проверка
+check file_exists("test.txt") start
+    log "Файл есть, размер: " + file_size("test.txt") + " байт"
+else start
+    log "Файла нет"
+end
+
+# Чтение
+set data = read_file("test.txt")
+log "Содержимое: " + data

@@ -1,0 +1,5 @@
+{
+    "name": "GUI Test",
+    "version": "1.0",
+    "main": "test_gui.sd"
+}

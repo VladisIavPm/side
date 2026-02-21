@@ -1,0 +1,18 @@
+# ============================================
+#  SIDE LANGUAGE - HELLO WORLD
+# ============================================
+
+log "╔══════════════════════════════════════╗"
+log "║                                      ║"
+log "║        👋 HELLO FROM SIDE!           ║"
+log "║                                      ║"
+log "╚══════════════════════════════════════╝"
+
+log "\n📦 Version: 1.2.0"
+log "📁 Interpreter size: 350 KB"
+log "⚡ Speed: lightning fast"
+
+log "\n🎯 Press Enter to continue..."
+entry ""
+
+log "\n✨ Thanks for choosing Side!"

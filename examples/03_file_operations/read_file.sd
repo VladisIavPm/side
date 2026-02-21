@@ -1,0 +1,3 @@
+# Чтение файла
+set content = read_file("test.txt")
+log "Содержимое файла:\n" + content

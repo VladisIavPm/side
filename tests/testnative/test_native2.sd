@@ -1,0 +1,4 @@
+load_native("gui")
+show_about()
+show_message("Привет, бро! Это работает!")
+log "Всё отлично!"

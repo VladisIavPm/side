@@ -1,0 +1,9 @@
+set a = 10
+fix b = 3
+set c = a + b
+log "a = " + a
+log "b = " + b
+log "a + b = " + c
+log "a * b = " + (a * b)
+log "a / b = " + (a / b)
+log "a % b = " + (a % b)

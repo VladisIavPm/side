@@ -1,0 +1,11 @@
+set arr = [10, 20, 30, 40]
+log arr
+log "Первый: " + arr[0]
+log "Последний: " + arr[3]
+
+arr[1] = 99
+log "После замены: " + arr
+
+set matrix = [[1,2], [3,4]]
+log "Матрица: " + matrix
+log "Элемент [1][0] = " + matrix[1][0]

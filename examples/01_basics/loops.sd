@@ -1,0 +1,12 @@
+# Циклы
+set i = 0
+loop i < 5 start
+    log "Счёт: " + i
+    set i = i + 1
+end
+
+# Цикл с выходом
+loop true start
+    set cmd = entry "Введи 'exit' для выхода: "
+    stop if cmd == "exit"
+end

@@ -1,0 +1,48 @@
+# Тест работы с папками и временем
+
+log "=== Тест create_dir ==="
+create_dir("test_folder")
+log "Папка test_folder создана"
+
+log "\n=== Тест записи файла в папку ==="
+write_file("test_folder/test.txt", "Привет из папки!")
+log "Файл test.txt создан"
+
+log "\n=== Тест file_time ==="
+set t = file_time("test_folder/test.txt")
+log "Время последнего изменения: " + t + " сек с 1970 года"
+
+log "\n=== Тест list_dir ==="
+set files = list_dir("test_folder")
+log "Содержимое test_folder:"
+set i = 0
+loop i < len(files) start
+    log "  " + files[i]
+    set i = i + 1
+end
+
+log "\n=== Тест rename_file ==="
+rename_file("test_folder/test.txt", "test_folder/renamed.txt")
+log "Файл переименован"
+
+log "\n=== Тест list_dir после переименования ==="
+set files2 = list_dir("test_folder")
+log "Содержимое test_folder после переименования:"
+set i = 0
+loop i < len(files2) start
+    log "  " + files2[i]
+    set i = i + 1
+end
+
+log "\n=== Тест удаления файла и папки ==="
+delete_file("test_folder/renamed.txt")
+remove_dir("test_folder")
+log "Папка удалена"
+
+check file_exists("test_folder") start
+    log "ОШИБКА: папка всё ещё существует"
+else start
+    log "НОРМАЛЬНО: папки нет"
+end
+
+log "\n=== Все тесты пройдены ==="

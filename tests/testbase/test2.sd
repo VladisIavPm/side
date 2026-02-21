@@ -1,0 +1,18 @@
+set age = 18
+check age >= 18 start
+    log "Взрослый"
+else start
+    log "Ребёнок"
+end
+
+set age = 15
+check age >= 18 start
+    log "Взрослый"
+else start
+    log "Ребёнок"
+end
+
+check false start
+    log "Это не выполнится"
+end
+log "После check без else"

@@ -1,0 +1,19 @@
+# Калькулятор (упрощённая версия)
+proc add(a, b) start give a + b end
+proc sub(a, b) start give a - b end
+proc mul(a, b) start give a * b end
+proc div(a, b) start
+    trap start
+        give a / b
+    else start
+        log "Ошибка деления!"
+        give 0
+    end
+end
+
+set x = 10
+set y = 3
+log "10 + 3 = " + add(x, y)
+log "10 - 3 = " + sub(x, y)
+log "10 * 3 = " + mul(x, y)
+log "10 / 3 = " + div(x, y)

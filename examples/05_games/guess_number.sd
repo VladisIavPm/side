@@ -1,0 +1,17 @@
+# Игра "Угадай число" (числа сравниваются как строки, пока нет to_number)
+set secret = "42"
+set attempts = 0
+
+log "Я загадал число от 1 до 100. Попробуй угадать!"
+
+loop true start
+    set guess = entry "Твой вариант: "
+    set attempts = attempts + 1
+    
+    check guess == secret start
+        log "Правильно! Попыток: " + attempts
+        stop
+    else start
+        log "Нет, попробуй ещё"
+    end
+end

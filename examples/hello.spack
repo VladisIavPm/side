@@ -1,0 +1,8 @@
+{
+    "name": "Hello Side",
+    "version": "1.0.0",
+    "main": "hello.sd",
+    "description": "First project in Side",
+    "author": "Your Name",
+    "year": "2025"
+}

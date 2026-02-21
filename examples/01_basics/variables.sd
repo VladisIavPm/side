@@ -1,0 +1,9 @@
+# Переменные и константы
+set name = "Алиса"
+fix PI = 3.14159
+set age = 16
+set age = age + 1
+
+log "Имя: " + name
+log "Возраст: " + age
+log "Число Пи: " + PI

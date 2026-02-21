@@ -1,0 +1,4 @@
+set name = entry "Введите имя: "
+log "Привет, " + name
+set age = entry "Сколько лет? "
+log "Тебе " + age + " лет"

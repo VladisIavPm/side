@@ -1,0 +1,17 @@
+proc add(a, b) start
+    give a + b
+end
+
+proc greet(name) start
+    log "Hello, " + name
+end
+
+proc nothing() start
+    log "Я ничего не возвращаю"
+end
+
+set sum = add(5, 3)
+log "5 + 3 = " + sum
+greet("Alice")
+set res = nothing()
+log "Результат nothing: " + res

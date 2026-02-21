@@ -1,0 +1,10 @@
+load_native("gui")
+
+show_about()
+show_message("Проверка связи")
+
+set version = get_version()
+log "Версия модуля: " + version
+
+set sum = add_numbers(15, 27)
+log "15 + 27 = " + sum

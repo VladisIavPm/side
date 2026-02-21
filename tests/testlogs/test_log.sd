@@ -1,0 +1,16 @@
+log "Привет из Side!"
+log_message("info", "Это сообщение из скрипта")
+log_message("warn", "Это предупреждение")
+log_message("error", "Это ошибка")
+
+# Поработаем с файлами
+write_file("test.txt", "Проверка логирования")
+set content = read_file("test.txt")
+log content
+
+# Вызовем несуществующую переменную (ошибка)
+trap start
+    log xyz
+else start
+    log "Поймали ошибку"
+end

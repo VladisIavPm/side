@@ -1,0 +1,3 @@
+load_native("egui")
+set result = message_box("Заголовок", "Текст сообщения")
+log "Результат: " + result
