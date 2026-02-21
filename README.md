@@ -172,7 +172,6 @@ hello("World!")
 ## 🛠️ **TECHNOLOGIES**
 
 - **Rust** — interpreter, native modules
-- **egui** — GUI framework
 - **libloading** — DLL loading
 - **Inno Setup** — installer
 - **HTML/CSS/JS** — documentation website
