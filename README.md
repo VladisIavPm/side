@@ -1,6 +1,3 @@
-# 📄 **Исправленный `README.md`**
-
-```markdown
 # ⚡ Side Language — Your Personal Programming Language
 
 <p align="center">
