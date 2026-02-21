@@ -46,3 +46,97 @@ git clone https://github.com/VladislavPm/side.git
 cd side
 cargo build --release
 target\release\side.exe
+
+🎮 QUICK START
+Your first program = hello.sd
+
+log "Hello, world!"
+
+spack run Paste the path to .sd...
+
+GUI with buttons
+
+load_native("egui")
+message_box("Side says:", "Hey bro!")
+
+Build .exe
+Create app.spack:
+{
+    "name": "MyApp",
+    "version": "1.0",
+    "main": "hello.sd"
+}
+
+spack build Paste the path to .spack...
+Run MyApp.exe — and you're done!
+
+📚 DOCUMENTATION
+Full documentation is available at:
+👉 side-lang.netlify.app
+
+There you'll find:
+
+Complete language guide
+
+Code examples
+
+Description of all functions
+
+Native modules creation guide
+
+Spack build system documentation
+
+🏗️ WHAT SIDE CAN DO
+Variables and types
+
+set x = 10
+fix PI = 3.14
+set name = "Arthur"
+set list = [1, 2, 3]
+
+Conditions and loops
+
+check x > 5 start
+    log "x is greater than 5"
+end
+
+loop i < 10 start
+    log i
+    set i = i + 1
+end
+
+Functions and structures
+
+proc add(a, b) start
+    give a + b
+end
+
+form Player start
+    set hp = 100
+    set name = ""
+end
+
+File operations
+
+write_file("data.txt", "Secret data")
+set text = read_file("data.txt")
+copy_file("backup.txt", "data.txt")
+delete_file("temp.txt")
+
+Native modules
+
+// Rust module
+#[no_mangle]
+pub static side_module_info: NativeModuleInfo = NativeModuleInfo {
+    name: b"mymodule\0" as *const u8 as *const c_char,
+    functions: FUNCTIONS.as_ptr(),
+    count: FUNCTIONS.len() as u32,
+};
+
+side;
+load_native("mymodule")
+hello("World!")
+
+📝 LICENSE
+MIT License — do whatever you want, but give us a shoutout if you can 😉
+
