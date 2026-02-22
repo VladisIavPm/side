@@ -166,6 +166,58 @@ hello("World!")
 
 ---
 
+## 📜 **Side Version History**
+
+### 🏁 **1.2.0 - First Stable Release** (Foundation)
+```
+✅ Basic syntax (variables, conditions, loops)
+✅ Functions and structures (proc, form)
+✅ Lists and indexing
+✅ File operations (reading, writing, deleting)
+✅ REPL with commands
+✅ Spack build system
+✅ Icons and installer
+✅ Documentation
+```
+
+### 🔌 **1.3.0 — Native modules** (extension)
+```
+✅ Loading .dll modules via load_native()
+✅ GUI on egui (windows with buttons)
+✅ Example message_box()
+✅ Support for Rust modules
+✅ Modules/ folder for storing .dll
+```
+
+### ⏱️ **1.3.1 — Timing** (optimization)
+```
+✅ Automatic execution time measurement
+✅ Statistics output after launch
+✅ Reading/execution/total in microseconds
+```
+
+### 🎲 **1.4.0 - Randomness and Time** (new functions)
+```
+✅ random() - random fraction from 0 to 1
+✅ randint(min, max) - random integer
+✅ time() - Unix timestamp (seconds)
+✅ now() - readable date/time
+✅ Execution speed ~2ms per script
+```
+
+---
+
+## 📊 **Evolution Side:**
+
+| Version | Main feature | Size  
+|--------|--------------|--------|
+| **1.2.0** | First release  | 350 KB |
+| **1.3.0** | Native modules | 450 KB |
+| **1.3.1** | Timing | 450 KB|
+| **1.4.0** | Randomness+time| 450 KB |
+
+---
+
 ## 🛠️ **TECHNOLOGIES**
 
 - **Rust** — interpreter, native modules
