@@ -1,7 +1,7 @@
 [Setup]
 AppName=Side Language
-AppVersion=1.2.0
-AppPublisher=Side Team
+AppVersion=1.3.1
+AppPublisher=Vladislav PM
 DefaultDirName={pf}\Side
 DefaultGroupName=Side
 UninstallDisplayIcon={app}\side.exe
@@ -21,7 +21,7 @@ Source: "LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 ; Иконки
 Source: "assets\side.ico"; DestDir: "{app}\assets"; Flags: ignoreversion
-Source: "assets\sd.ico"; DestDir: "{app}\assets"; Flags: ignoreversion
+Source: "assets\cd.ico"; DestDir: "{app}\assets"; Flags: ignoreversion
 Source: "assets\spack.ico"; DestDir: "{app}\assets"; Flags: ignoreversion
 
 ; Документация
