@@ -79,7 +79,7 @@ fn run_file_with_interpreter(filename: &str, interpreter: &mut Interpreter) -> a
 }
 
 fn repl_loop_with_interpreter(interpreter: &mut Interpreter) -> anyhow::Result<()> {
-    println!("Side Language Interpreter v1.3.1 with Spack");
+    println!("Side Language Interpreter v1.4 with Spack");
     println!("Commands:");
     println!("  spack run <file>              - execute script");
     println!("  spack build [file]            - build executable from config");
