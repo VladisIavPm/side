@@ -16,6 +16,7 @@ use logos::Logos;
 use parser::Parser;
 use interpreter::Interpreter;
 use project::SpackConfig;
+use std::time::Instant;
 
 const STATE_FILE: &str = ".spack_current";
 
@@ -29,6 +30,8 @@ fn load_current_config() -> Option<PathBuf> {
 }
 
 fn build_from_config(config_path: &Path) -> Result<(), String> {
+    let start = Instant::now();
+    
     let config = SpackConfig::from_file(config_path)?;
     let main_file = config_path.parent().unwrap_or(Path::new(".")).join(&config.main);
     let main_file = main_file.to_str().ok_or("Invalid main file path")?;
@@ -36,7 +39,11 @@ fn build_from_config(config_path: &Path) -> Result<(), String> {
     let output = output.to_str().ok_or("Invalid output path")?;
     
     packer::build(main_file, output)?;
+    
+    let duration = start.elapsed();
     println!("Built project '{}' v{}", config.name, config.version);
+    println!("⏱️  Время сборки: {:?}", duration);
+    
     Ok(())
 }
 
@@ -50,13 +57,29 @@ fn run_script(source: &str, interpreter: &mut Interpreter) -> anyhow::Result<()>
 }
 
 fn run_file_with_interpreter(filename: &str, interpreter: &mut Interpreter) -> anyhow::Result<()> {
+    let total_start = Instant::now();
+    
     let source = fs::read_to_string(filename)?;
+    let read_time = total_start.elapsed();
+    
     logger::info(&format!("Executing file: {}", filename));
-    run_script(&source, interpreter)
+    
+    let exec_start = Instant::now();
+    run_script(&source, interpreter)?;
+    let exec_time = exec_start.elapsed();
+    
+    let total_time = total_start.elapsed();
+    
+    println!("\n⏱️  [TIMING] {}", filename);
+    println!("   📂 Чтение:    {:?}", read_time);
+    println!("   ⚡ Выполнение: {:?}", exec_time);
+    println!("   📦 ИТОГО:     {:?}", total_time);
+    
+    Ok(())
 }
 
 fn repl_loop_with_interpreter(interpreter: &mut Interpreter) -> anyhow::Result<()> {
-    println!("Side Language Interpreter v1.2 with Spack");
+    println!("Side Language Interpreter v1.3.1 with Spack");
     println!("Commands:");
     println!("  spack run <file>              - execute script");
     println!("  spack build [file]            - build executable from config");
