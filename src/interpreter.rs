@@ -771,9 +771,69 @@ impl Interpreter {
             Ok(Value::None)
         }
 
+        // ==================== НОВЫЕ ФУНКЦИИ ====================
+        "random" => {
+            logger::info("Built-in function: random");
+            match args.len() {
+                0 => {
+                    use rand::Rng;
+                    let mut rng = rand::thread_rng();
+                    Ok(Value::Fraction(rng.gen()))
+                }
+                2 => {
+                    match (&args[0], &args[1]) {
+                        (Value::Whole(min), Value::Whole(max)) => {
+                            if min >= max {
+                                return Err(RuntimeError::TypeError("random: min must be less than max".to_string()));
+                            }
+                            use rand::Rng;
+                            let mut rng = rand::thread_rng();
+                            Ok(Value::Whole(rng.gen_range(*min..=*max)))
+                        }
+                        _ => Err(RuntimeError::TypeError("random with two arguments expects two integers".to_string())),
+                    }
+                }
+                _ => Err(RuntimeError::TypeError("random expects 0 or 2 arguments".to_string())),
+            }
+        }
+        "randint" => {
+            logger::info("Built-in function: randint");
+            if args.len() != 2 {
+                return Err(RuntimeError::TypeError("randint expects 2 arguments".to_string()));
+            }
+            match (&args[0], &args[1]) {
+                (Value::Whole(min), Value::Whole(max)) => {
+                    if min >= max {
+                        return Err(RuntimeError::TypeError("randint: min must be less than max".to_string()));
+                    }
+                    use rand::Rng;
+                    let mut rng = rand::thread_rng();
+                    Ok(Value::Whole(rng.gen_range(*min..=*max)))
+                }
+                _ => Err(RuntimeError::TypeError("randint expects two integers".to_string())),
+            }
+        }
+        "time" => {
+            logger::info("Built-in function: time");
+            if !args.is_empty() {
+                return Err(RuntimeError::TypeError("time expects 0 arguments".to_string()));
+            }
+            let now = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map_err(|_| RuntimeError::TypeError("System time error".to_string()))?;
+            Ok(Value::Whole(now.as_secs() as i64))
+        }
+        "now" => {
+            logger::info("Built-in function: now");
+            if !args.is_empty() {
+                return Err(RuntimeError::TypeError("now expects 0 arguments".to_string()));
+            }
+            let now = chrono::Local::now();
+            Ok(Value::String(now.format("%Y-%m-%d %H:%M:%S").to_string()))
+        }
+
         // ==================== ПОЛЬЗОВАТЕЛЬСКИЕ ФУНКЦИИ ====================
         _ => {
-            // Сначала ищем в обычных (пользовательских) функциях
             if let Some(proc) = self.functions.get(name) {
                 let proc = proc.clone();
                 if proc.params.len() != args.len() {
@@ -796,7 +856,6 @@ impl Interpreter {
                 };
             }
 
-            // Если не нашли в пользовательских, ищем в нативных модулях
             for (mod_name, module) in &self.native_modules {
                 if let Some(info) = module.functions.get(name) {
                     if args.len() != info.arg_count as usize {
@@ -806,7 +865,6 @@ impl Interpreter {
                         )));
                     }
 
-                    // Диспетчеризация по количеству аргументов с поддержкой возврата i64
                     match info.arg_count {
                         0 => {
                             type FnType = extern "C" fn() -> i64;
@@ -815,7 +873,6 @@ impl Interpreter {
                             return Ok(Value::Whole(result));
                         }
                         1 => {
-                            // Пока поддерживаем только строковый аргумент
                             match &args[0] {
                                 Value::String(s) => {
                                     let c_string = CString::new(s.as_str())
@@ -833,29 +890,27 @@ impl Interpreter {
                             }
                         }
                         2 => {
-    // Поддержка разных сигнатур: (строка, строка)
-    if let (Value::String(s1), Value::String(s2)) = (&args[0], &args[1]) {
-        let c_string1 = CString::new(s1.as_str())
-            .map_err(|_| RuntimeError::TypeError("String contains null byte".to_string()))?;
-        let c_string2 = CString::new(s2.as_str())
-            .map_err(|_| RuntimeError::TypeError("String contains null byte".to_string()))?;
-        
-        type FnType = extern "C" fn(*const std::os::raw::c_char, *const std::os::raw::c_char) -> i64;
-        let func: FnType = unsafe { std::mem::transmute(info.func_ptr) };
-        let result = func(c_string1.as_ptr(), c_string2.as_ptr());
-        return Ok(Value::Whole(result));
-    }
-    // Если переданы два целых числа (для других функций)
-    else if let (Value::Whole(a), Value::Whole(b)) = (&args[0], &args[1]) {
-        type FnType = extern "C" fn(i64, i64) -> i64;
-        let func: FnType = unsafe { std::mem::transmute(info.func_ptr) };
-        let result = func(*a, *b);
-        return Ok(Value::Whole(result));
-    } else {
-        return Err(RuntimeError::TypeError(
-            "Native function with two arguments expects either two strings or two integers".to_string()
-        ));
-    }
+                            if let (Value::String(s1), Value::String(s2)) = (&args[0], &args[1]) {
+                                let c_string1 = CString::new(s1.as_str())
+                                    .map_err(|_| RuntimeError::TypeError("String contains null byte".to_string()))?;
+                                let c_string2 = CString::new(s2.as_str())
+                                    .map_err(|_| RuntimeError::TypeError("String contains null byte".to_string()))?;
+                                
+                                type FnType = extern "C" fn(*const std::os::raw::c_char, *const std::os::raw::c_char) -> i64;
+                                let func: FnType = unsafe { std::mem::transmute(info.func_ptr) };
+                                let result = func(c_string1.as_ptr(), c_string2.as_ptr());
+                                return Ok(Value::Whole(result));
+                            }
+                            else if let (Value::Whole(a), Value::Whole(b)) = (&args[0], &args[1]) {
+                                type FnType = extern "C" fn(i64, i64) -> i64;
+                                let func: FnType = unsafe { std::mem::transmute(info.func_ptr) };
+                                let result = func(*a, *b);
+                                return Ok(Value::Whole(result));
+                            } else {
+                                return Err(RuntimeError::TypeError(
+                                    "Native function with two arguments expects either two strings or two integers".to_string()
+                                ));
+                            }
                         }
                         _ => {
                             return Err(RuntimeError::TypeError(
